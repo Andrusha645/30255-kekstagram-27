@@ -88,14 +88,14 @@ const unblockSubmitButton = () => {
   submitButton.textContent = 'Опубликовать';
 };
 
-const setUserFormSubmit = (onSuccess) =>{
+const setUserFormSubmit = () =>{
   form.addEventListener('submit', (evt) => {
     evt.preventDefault();
     const isValid = pristine.validate();
     if (isValid) {
       blockSubmitButton();
       sendData(
-        () => {onSuccess();
+        () => {closeModal();
           unblockSubmitButton();
           showMessageSuccess();
         },

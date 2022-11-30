@@ -1,14 +1,19 @@
-const getData = (onSuccess) => {
-  fetch('https://27.javascript.pages.academy/kekstagram/data')
+const ADDRESS_GET_DATA = 'https://27.javascript.pages.academy/kekstagram/data';
+const ADDRESS_SEND_DATA = 'https://27.javascript.pages.academy/kekstagram';
+const getData = (onSuccess, onFail) => {
+  fetch(ADDRESS_GET_DATA)
     .then((response) => response.json())
     .then((pictures) => {
       onSuccess(pictures);
+    })
+    .catch(() => {
+      onFail('Не удалось отправить форму. Попробуйте обновить страницу');
     });
 };
 
 const sendData = (onSuccess, onFail, body) => {
   fetch (
-    'https://27.javascript.pages.academy/kekstagram',
+    ADDRESS_SEND_DATA,
     {
       method: 'POST',
       body:body,
