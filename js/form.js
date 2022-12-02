@@ -12,9 +12,14 @@ const fileField = document.querySelector('#upload-file');
 const hashTagsField = document.querySelector('.text__hashtags');
 const commentField = document.querySelector('.text__description');
 const submitButton = document.querySelector('.img-upload__submit');
+const fileChooser = document.querySelector('.img-upload__input[type=file]');
+const preview = document.querySelector('.img-upload__preview img');
+const smallPreview = document.querySelectorAll('.effects__preview');
 
 const MAX_HASH_TAG_NUMBER = 5;
 const VALID_SYMBOLS = /^#[a-zа-яё0-9]{1,19}$/i;
+const FILE_TYPES = ['jpg', 'jpeg', 'png'];
+const DEFAULT_PREVIEW = 'img/upload-default-image.jpg';
 
 const pristine = new Pristine (form, {
   classTo: 'img-upload__field-wrapper',
@@ -38,11 +43,30 @@ const closeModal = () => {
   form.reset();
   resetEffects();
   pristine.reset();
+  preview.src = DEFAULT_PREVIEW;
+  smallPreview.forEach((value) => {
+    value.style.backgroundImage = `url("${DEFAULT_PREVIEW}")`;
+  });
   modal.classList.add('hidden');
   body.classList.remove('.modal-open');
   document.removeEventListener('keydown', onEscKeyDown);
 };
 
+const isValidType = (file) => {
+  const fileName = file.name.toLowerCase();
+  return FILE_TYPES.some((it) => fileName.endsWith(it));
+};
+
+const onPreviewChange = () => {
+  const file = fileChooser.files[0];
+
+  if (file && isValidType(file)) {
+    preview.src = URL.createObjectURL(file);
+    smallPreview.forEach((value) => {
+      value.style.backgroundImage = `url("${URL.createObjectURL(file)}")`;
+    });
+  }
+};
 const isTextFieldFocused = () =>
   document.activeElement === hashTagsField ||
 document.activeElement === commentField;
@@ -77,6 +101,7 @@ pristine.addValidator(
 );
 closeButton.addEventListener('click', closeModal);
 fileField.addEventListener('change', showModal);
+fileChooser.addEventListener('change', onPreviewChange);
 
 const blockSubmitButton = () => {
   submitButton.disabled = true;

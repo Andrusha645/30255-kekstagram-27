@@ -4,5 +4,6 @@ import {renderPictures} from './picture.js';
 import {getData} from './api.js';
 import {showAlert} from './utils.js';
 
+
 getData(renderPictures, showAlert);
 setUserFormSubmit(closeModal);
